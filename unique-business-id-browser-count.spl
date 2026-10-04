@@ -3,4 +3,5 @@ Counts unique BusinessID + Browser pairs per node group from portal production h
 excluding Pingdom bots. Extracts node group from BusinessID, then returns the top 10
 browsers (by count) for each node group.
 `
+
 index="??" sourcetype="??" host="prd-portala*" NOT "pingdom.com_bot" | dedup BusinessID, Browser | rex field=BusinessID "1(?<NODE_GROUP>([0-3][0-9]|40))\d+" | stats count by NODE_GROUP, Browser | sort - count | stats  list(Browser) as "Browser", list(count) as "Count" by NODE_GROUP | rename NODE_GROUP as "Node group" | eval Browser=mvindex(Browser, 0, 9) | eval Count=mvindex(Count, 0, 9)

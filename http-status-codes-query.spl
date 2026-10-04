@@ -2,4 +2,5 @@
 Filters HTTP events for 4xx and 5xx status codes, labels common codes with
 human-readable names, then charts count (with sparkline) by status.
 `
+
 $BASE_QUERY$ "HTTP/" | spath | search status="4*" OR status="5*" | eval status=if(status="400", "400 - Bad request", status) | eval status=if(status="401", "401 - Unauthorized", status) | eval status=if(status="403", "403 - Forbidden", status) | eval status=if(status="404", "404 - Not found", status) | eval status=if(status="405", "405 - Method not allowed", status) | eval status=if(status="409", "409 - Conflict", status) | eval status=if(status="416", "416 - Requested range not satisfiable", status) | eval status=if(status="500", "500 - Internal server error", status) | eval status=if(status="501", "501 - Not implemented", status) | eval status=if(status="502", "502 - Bad gateway", status) | eval status=if(status="503", "503 - Service unavailable ", status) | eval status=if(status="504", "504 - Gateway timeout", status) | eval status=if(status="505", "505 - HTTP Version Not Supported", status) | stats sparkline count by status | sort - status
